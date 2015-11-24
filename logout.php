@@ -39,9 +39,7 @@ if (isset($_COOKIE[session_name()])) {
     
     <body>
         <div class="container">
-            <?php
-                include('navbar.php');
-            ?>
+            <?php include('navbar.php'); ?>
             <div class="row">   
                 <div class="col-sm-6 col-sm-offset-3">
                     <h1>Logged out</h1>

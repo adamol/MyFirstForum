@@ -98,9 +98,10 @@ mysqli_close($conn);
                             if (mysqli_num_rows($result) > 0) {
                                 while ($row = mysqli_fetch_assoc($result)) {
                                     echo "<tr>";
-                                    echo "<td>" . $row['user'] . "</td>";
-                                    echo "<td>" . $row['titel'] . "</td>";
-                                    echo "<td><form action='post.php' method='get'><a href='post.php'><button class='btn btn-default pull-right' value='" . $row['id'] . "' name='id'>Read post &raquo;</button></a></form></td>";
+                                    echo "<td class='col-sm-2'>" . $row['user'] . "</td>";
+                                  //  echo "<td>" . $row['titel'] . "</td>";
+                                   // echo "<td><form action='post.php' method='get'><a href='post.php'><button class='btn btn-default pull-right' value='" . $row['id'] . "' name='id'>Read post &raquo;</button></a></form></td>";
+                                    echo "<td class='col-sm-10'><a href='post.php?id=" . $row['id'] . "''>" . $row['titel'] . "</a></td>";
                                     echo "</tr>";
                                 }
                             }

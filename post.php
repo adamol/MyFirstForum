@@ -69,48 +69,52 @@ mysqli_close($conn);
     <body>
         <div class="container">
             <?php include('navbar.php'); ?>
-            <h1>Post Page</h1>
-            <p class="lead">This is post with id <?php echo $_GET['id']; ?>.</p> 
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <h1>Post Page</h1>
+                    <p class="lead">This is post with id <?php echo $_GET['id']; ?>.</p> 
 
 
-            <?php
+                    <?php
 
-                if (isset($_GET['id'])) {
-                    include('connection.php');
+                        if (isset($_GET['id'])) {
+                            include('connection.php');
 
-                    $id     = $_GET['id'];
-                    $query  = "SELECT titel, content FROM posts WHERE id=$id";
-                    $result = mysqli_query($conn, $query);
+                            $id     = $_GET['id'];
+                            $query  = "SELECT titel, content FROM posts WHERE id=$id";
+                            $result = mysqli_query($conn, $query);
 
-                    if (mysqli_num_rows($result) > 0) {
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            echo "<h3>" . $row['titel'] . "</h3>";
-                            echo "<p>" . $row['content'] . "</p>";
+                            if (mysqli_num_rows($result) > 0) {
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    echo "<h3>" . $row['titel'] . "</h3>";
+                                    echo "<p>" . $row['content'] . "</p>";
+                                }
+                            }
+                        } 
+                    ?>
+
+                    <?php
+
+                        if (isset($_GET['id'])) {
+                            include('connection.php');
+
+                            $id             = $_GET['id'];
+                            $comments       = "SELECT comment_titel, comment_content FROM comments WHERE post_id=$id";
+                            $commentresults = mysqli_query($conn, $comments);
+                
+                            if (mysqli_num_rows($commentresults) > 0) {
+                                echo "hi";
+                                while ($commentrow = mysqli_fetch_assoc($commentresults)) {
+                                    echo "<h3>" . $commentrow['comment_titel'] . "</h3>";
+                                    echo "<p>" . $commentrow['comment_content'] . "</p>";
+                                    echo "derp";
+                                }
+                            }
                         }
-                    }
-                } 
-            ?>
 
-            <?php
-
-                if (isset($_GET['id'])) {
-                    include('connection.php');
-
-                    $id             = $_GET['id'];
-                    $comments       = "SELECT comment_titel, comment_content FROM comments WHERE post_id=$id";
-                    $commentresults = mysqli_query($conn, $comments);
-        
-                    if (mysqli_num_rows($commentresults) > 0) {
-                        echo "hi";
-                        while ($commentrow = mysqli_fetch_assoc($commentresults)) {
-                            echo "<h3>" . $commentrow['comment_titel'] . "</h3>";
-                            echo "<p>" . $commentrow['comment_content'] . "</p>";
-                            echo "derp";
-                        }
-                    }
-                }
-
-            ?>      
+                    ?>      
+                </div>
+            </div>
 
             <!-- if logged in there should be a form to create post -->
             <?php

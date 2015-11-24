@@ -83,7 +83,7 @@ if (isset($_POST['login'])) {
 			<div class="col-sm-6 col-sm-offset-3">
 				<h1>Login</h1>
 				<p class="lead">Use this form to log in to your account</p>
-				
+
 				<form class="form-inline" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
 
 					<div class="form-group">
