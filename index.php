@@ -79,32 +79,36 @@ mysqli_close($conn);
         </div>
 
         <!-- List of recent forum posts -->
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>User</th>
-                    <th>Topic</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php 
-                    include('connection.php');
-                    $query = "SELECT * FROM posts";
-                    $result = mysqli_query( $conn, $query );
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Topic</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                            include('connection.php');
+                            $query = "SELECT * FROM posts";
+                            $result = mysqli_query( $conn, $query );
 
-                    if (mysqli_num_rows($result) > 0) {
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            echo "<tr>";
-                            echo "<td>" . $row['user'] . "</td>";
-                            echo "<td>" . $row['titel'] . "</td>";
-                            echo "<td><form action='post.php' method='get'><a href='post.php'><button class='btn btn-default pull-right' value='" . $row['id'] . "' name='id'>Read post &raquo;</button></a></form></td>";
-                            echo "</tr>";
-                        }
-                    }
-                ?>
-            </tbody>
-        </table>
+                            if (mysqli_num_rows($result) > 0) {
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    echo "<tr>";
+                                    echo "<td>" . $row['user'] . "</td>";
+                                    echo "<td>" . $row['titel'] . "</td>";
+                                    echo "<td><form action='post.php' method='get'><a href='post.php'><button class='btn btn-default pull-right' value='" . $row['id'] . "' name='id'>Read post &raquo;</button></a></form></td>";
+                                    echo "</tr>";
+                                }
+                            }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
         <!-- if $_SESSION['email'] there should be a form to create post -->
         <?php if ($_SESSION['loggedInUser']) { ?>

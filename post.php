@@ -68,6 +68,7 @@ mysqli_close($conn);
     
     <body>
         <div class="container">
+            <?php include('navbar.php'); ?>
             <h1>Post Page</h1>
             <p class="lead">This is post with id <?php echo $_GET['id']; ?>.</p> 
 

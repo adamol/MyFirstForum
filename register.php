@@ -69,29 +69,29 @@ mysqli_close($conn);
 <body>
 
 	<div class="container">
-		<?php include(navbar.php); ?>
-		<h1>Register</h1>
-		<p class="lead">Use this form to register for an account.</p>	
+		<?php include('navbar.php'); ?>
+		
 
-		<div class="row">
-				<div class="col-sm-6 col-sm-offset-3">
-					<form class="form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+		<div class="row">	
+			<div class="col-sm-6 col-sm-offset-3">
+				<h1>Register</h1>
+				<p class="lead">Use this form to register for an account.</p>
+				<form class="form-inline" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
 
-						<div class="form-group">
-							<label for="username" class="sr-only">Username</label>
-							<small class="text-danger"><?php echo $nameError; ?></small>
-							<input type="text" class="form-control" id="username" placeholder="Username" name="username">
-						</div>
+					<div class="form-group">
+						<label for="username" class="sr-only">Username</label>
+						<small class="text-danger"><?php echo $nameError; ?></small>
+						<input type="text" class="form-control" id="username" placeholder="Username" name="username">
+					</div>
 
-						<div class="form-group">
-							<label for="password" class="sr-only">Password</label>
-							<small class="text-danger"><?php echo $passwordError; ?></small>
-							<input type="password" class="form-control" id="password" placeholder="Password" name="password">
-						</div>
+					<div class="form-group">
+						<label for="password" class="sr-only">Password</label>
+						<small class="text-danger"><?php echo $passwordError; ?></small>
+						<input type="password" class="form-control" id="password" placeholder="Password" name="password">
+					</div>
 
-						<button type="submit" class="btn btn-danger" name="submit">Register</button>
-					</form>
-				</div>
+					<button type="submit" class="btn btn-danger" name="submit">Register</button>
+				</form>
 			</div>
 
 		</div>
