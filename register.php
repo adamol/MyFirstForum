@@ -28,8 +28,8 @@ if (isset($_POST['submit'])) {
 	}
 
 	if ($username && $hashedPass) {
-		// $query = "INSERT INTO users (username, password) VALUES ('$username', '$hashedPass')";
-		$query = "INSERT INTO users (username, password) VALUES ('$username', '$password')";
+		$query = "INSERT INTO users (username, password) VALUES ('$username', '$hashedPass')";
+		//$query = "INSERT INTO users (username, password) VALUES ('$username', '$password')";
 
 		if (mysqli_query($conn, $query)) {
 			echo"<div class='alert alert-success'>New record in database!</div>";
@@ -68,33 +68,42 @@ mysqli_close($conn);
 </head>
 <body>
 
-	<div class="container">
-		<?php include('navbar.php'); ?>
+	<div class="container col-sm-6 col-sm-offset-3">
+		<div class="navbar">
+		    <nav>
+		        <ul class="nav nav-pills pull-right">
+		            <li><a href="index.php">Home</a></li>
+		            <?php if($_SESSION['loggedInUser']) { ?>
+		                <li><a href="logout.php">Logout</a></li>
+		            <?php } else { ?>
+		                <li><a href="login.php">Login</a></li>
+		                <li class="active"><a href="register.php">Register</a></li>
+		            <?php } ?>
+		        </ul>
+		    </nav>
+		    <h3 class="text-muted"><a href="/">My Forum</a></h3>
+		</div>
 		
 
-		<div class="row">	
-			<div class="col-sm-6 col-sm-offset-3">
-				<h1>Register</h1>
-				<p class="lead">Use this form to register for an account.</p>
-				<form class="form-inline" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+		<h1>Register</h1>
+		<p class="lead">Use this form to register for an account.</p>
+		<form class="form-inline" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
 
-					<div class="form-group">
-						<label for="username" class="sr-only">Username</label>
-						<small class="text-danger"><?php echo $nameError; ?></small>
-						<input type="text" class="form-control" id="username" placeholder="Username" name="username">
-					</div>
-
-					<div class="form-group">
-						<label for="password" class="sr-only">Password</label>
-						<small class="text-danger"><?php echo $passwordError; ?></small>
-						<input type="password" class="form-control" id="password" placeholder="Password" name="password">
-					</div>
-
-					<button type="submit" class="btn btn-danger" name="submit">Register</button>
-				</form>
+			<div class="form-group">
+				<label for="username" class="sr-only">Username</label>
+				<small class="text-danger"><?php echo $nameError; ?></small>
+				<input type="text" class="form-control" id="username" placeholder="Username" name="username">
 			</div>
 
-		</div>
+			<div class="form-group">
+				<label for="password" class="sr-only">Password</label>
+				<small class="text-danger"><?php echo $passwordError; ?></small>
+				<input type="password" class="form-control" id="password" placeholder="Password" name="password">
+			</div>
+
+			<button type="submit" class="btn btn-default" name="submit">Register</button>
+		</form>
+
 
 	</div>
 

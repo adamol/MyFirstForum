@@ -25,9 +25,7 @@ if (isset($_POST['login'])) {
 			$hashedPass = $row['password'];
 		}
 
-		$testhash = password_hash($formPass, PASSWORD_DEFAULT);
-		//if (password_verify($formPass, $hashedPass)) { // && $user == $formUser)) {
-		if (password_verify($formPass, $testhash)) { 
+		if (password_verify($formPass, $hashedPass)) {
 			// Correct login details. Start sessions.
 			session_start();
 
@@ -74,32 +72,41 @@ if (isset($_POST['login'])) {
 </head>
 <body>
 
-	<div class="container">
-		<?php include('navbar.php'); ?>
+	<div class="container col-sm-6 col-sm-offset-3">
+		<div class="navbar">
+		    <nav>
+		        <ul class="nav nav-pills pull-right">
+		            <li><a href="index.php">Home</a></li>
+		            <?php if($_SESSION['loggedInUser']) { ?>
+		                <li><a href="logout.php">Logout</a></li>
+		            <?php } else { ?>
+		                <li class="active"><a href="login.php">Login</a></li>
+		                <li><a href="register.php">Register</a></li>
+		            <?php } ?>
+		        </ul>
+		    </nav>
+		    <h3 class="text-muted"><a href="/">My Forum</a></h3>
+		</div>
 
 		<?php echo $loginError; ?>
 
-		<div class="row">
-			<div class="col-sm-6 col-sm-offset-3">
-				<h1>Login</h1>
-				<p class="lead">Use this form to log in to your account</p>
+		<h1>Login</h1>
+		<p class="lead">Use this form to log in to your account</p>
 
-				<form class="form-inline" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+		<form class="form-inline" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
 
-					<div class="form-group">
-						<label for="login-username" class="sr-only">Username</label>
-						<input type="text" class="form-control" id="login-username" placeholder="Username" name="username">
-					</div>
-
-					<div class="form-group">
-						<label for="login-password" class="sr-only">Password</label>
-						<input type="password" class="form-control" id="login-password" placeholder="Password" name="password">
-					</div>
-
-					<button type="submit" class="btn btn-danger" name="login">Login</button>
-				</form>
+			<div class="form-group">
+				<label for="login-username" class="sr-only">Username</label>
+				<input type="text" class="form-control" id="login-username" placeholder="Username" name="username">
 			</div>
-		</div>
+
+			<div class="form-group">
+				<label for="login-password" class="sr-only">Password</label>
+				<input type="password" class="form-control" id="login-password" placeholder="Password" name="password">
+			</div>
+
+			<button type="submit" class="btn btn-default" name="login">Login</button>
+		</form>
 	</div>
 
 

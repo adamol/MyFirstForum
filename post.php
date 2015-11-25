@@ -10,14 +10,7 @@ if (isset($_POST['submit'])) {
     }
 
     // Set all variables empty by default
-    $titel = $content = "";
-
-    if (!$_POST['titel']) {
-        $titelError = "Please enter a titel <br>";
-    }
-    else {
-        $titel = validateFormData($_POST['titel']);
-    }
+    $content = "";
 
     if (!$_POST['content']) {
         $contentError = "Please enter some content <br>";
@@ -26,13 +19,13 @@ if (isset($_POST['submit'])) {
         $content = validateFormData($_POST['content']);
     }
 
-    if ($titel && $content) {
-        $user = $_SESSION['loggedInUser'];
+    $user = $_SESSION['loggedInUser'];
+    if ($user && $content) {
         $post_id = $_SESSION['postID'];
-        $query = "INSERT INTO comments (post_id, comment_titel, comment_content, comment_user, comment_date) VALUES ('$post_id', '$titel', '$content', '$user', CURRENT_TIMESTAMP)";
+        $query = "INSERT INTO comments (post_id, comment_content, comment_user, comment_date) VALUES ('$post_id', '$content', '$user', CURRENT_TIMESTAMP)";
 
         if (mysqli_query($conn, $query)) {
-            echo"<div class='alert alert-success'>New record in database!</div>";
+            echo "<div class='alert alert-success'>New record in database!</div>";
             header("Location: post.php" . "?id=" . $_SESSION['postID']);
         }
         else {
@@ -63,82 +56,83 @@ mysqli_close($conn);
         <title>my forum</title>
 
         <!-- Custom CSS -->
-        <link rel="stylesheet" href="styles.css"
+        <link rel="stylesheet" href="styles.css">
     </head>
     
     <body>
-        <div class="container">
-            <?php include('navbar.php'); ?>
-            <div class="row">
-                <div class="col-sm-6 col-sm-offset-3">
-                    <h1>Post Page</h1>
-                    <p class="lead">This is post with id <?php echo $_GET['id']; ?>.</p> 
-
-
-                    <?php
-
-                        if (isset($_GET['id'])) {
-                            include('connection.php');
-
-                            $id     = $_GET['id'];
-                            $query  = "SELECT titel, content FROM posts WHERE id=$id";
-                            $result = mysqli_query($conn, $query);
-
-                            if (mysqli_num_rows($result) > 0) {
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    echo "<h3>" . $row['titel'] . "</h3>";
-                                    echo "<p>" . $row['content'] . "</p>";
-                                }
-                            }
-                        } 
-                    ?>
-
-                    <?php
-
-                        if (isset($_GET['id'])) {
-                            include('connection.php');
-
-                            $id             = $_GET['id'];
-                            $comments       = "SELECT comment_titel, comment_content FROM comments WHERE post_id=$id";
-                            $commentresults = mysqli_query($conn, $comments);
-                
-                            if (mysqli_num_rows($commentresults) > 0) {
-                                echo "hi";
-                                while ($commentrow = mysqli_fetch_assoc($commentresults)) {
-                                    echo "<h3>" . $commentrow['comment_titel'] . "</h3>";
-                                    echo "<p>" . $commentrow['comment_content'] . "</p>";
-                                    echo "derp";
-                                }
-                            }
-                        }
-
-                    ?>      
-                </div>
+        <div class="container col-sm-6 col-sm-offset-3">
+            <div class="navbar">
+                <nav>
+                    <ul class="nav nav-pills pull-right">
+                        <li><a href="index.php">Home</a></li>
+                        <?php if($_SESSION['loggedInUser']) { ?>
+                            <li><a href="logout.php">Logout</a></li>
+                        <?php } else { ?>
+                            <li><a href="login.php">Login</a></li>
+                            <li><a href="register.php">Register</a></li>
+                        <?php } ?>
+                    </ul>
+                </nav>
+                <h3 class="text-muted"><a href="/">My Forum</a></h3>
             </div>
+
+            <?php
+
+                if (isset($_GET['id'])) {
+                    include('connection.php');
+
+                    $id     = $_GET['id'];
+                    $query  = "SELECT * FROM posts WHERE id=$id";
+                    $result = mysqli_query($conn, $query);
+
+                    if (mysqli_num_rows($result) > 0) {
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            echo "<h3>" . $row['titel'] . "</h3>";
+                            echo "<p>" . $row['content'] . "</p>";
+                            echo "<div class='clearfix'><small class='pull-right'>Posted by " . $row['user'] . " on " . $row['post_date'] . "</small></div>";
+                            echo "<hr>";
+                        }
+                    }
+                } 
+            ?>
+
+            <?php
+
+                if (isset($_GET['id'])) {
+                    include('connection.php');
+
+                    $id             = $_GET['id'];
+                    $comments       = "SELECT comment_content, comment_user FROM comments WHERE post_id=$id";
+                    $commentresults = mysqli_query($conn, $comments);
+        
+                    if (mysqli_num_rows($commentresults) > 0) {
+                        while ($commentrow = mysqli_fetch_assoc($commentresults)) {
+                            echo "<div class='row'>";
+                            echo "<div class='col-sm-2'>" . $commentrow['comment_user'] . "</div>";
+                            echo "<div class='col-sm-10'>" . $commentrow['comment_content'] . "</div>";
+                            echo "</div>";
+                            echo "<hr>";
+                        }
+                    }
+                }
+
+            ?>      
 
             <!-- if logged in there should be a form to create post -->
             <?php
                 if ($_SESSION['loggedInUser']) { 
                 $_SESSION['postID'] = $_GET['id'];
             ?>
-                <div class="row">
-                    <div class="col-sm-6 col-sm-offset-3">
-                        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
-                            <legend>Reply to post</legend>
-                            <div class="form-group">
-                                <label for="post-titel" class="sr-only">Post titel</label>
-                                <small class="text-danger">* <?php echo $titelError; ?></small>
-                                <input type="text" class="form-control" id="post-titel" placeholder="Post titel" name="titel">
-                            </div>
-
-                            <div class="form-group">
-                                <small class="text-danger">* <?php echo $contentError; ?></small>
-                                <textarea class="form-control" rows="6" placeholder="Post content" name="content"></textarea>
-                            </div>
-                            <input type="submit" name="submit" value="Post">
-                        </form>
-                    </div>
+                
+            <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+                <legend>Reply to post</legend>
+                <div class="form-group">
+                    <small class="text-danger"><?php echo $contentError; ?></small>
+                    <textarea class="form-control" rows="6" placeholder="Comment content" name="content"></textarea>
                 </div>
+                <input type="submit" class="btn btn-default" name="submit" value="Comment">
+            </form>
+                 
             <?php } ?>
         </div>
         
